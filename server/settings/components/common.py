@@ -24,6 +24,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 INSTALLED_APPS: Tuple[str, ...] = (
     # Your apps go here:
     'server.apps.main',
+    'server.apps.account',
 
     # Default django apps:
     'django.contrib.auth',
@@ -202,6 +203,8 @@ PERMISSIONS_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
 
 EMAIL_TIMEOUT = 5
 
+
+AUTH_USER_MODEL = 'account.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
