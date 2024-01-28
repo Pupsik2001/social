@@ -80,6 +80,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=_USER_MAX_LENGTH)
     email = models.EmailField(db_index=True, unique=True)
 
+    bio = models.TextField(default='')
+    # avatar = models.ImageField(null=True)
+
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
 
@@ -102,4 +105,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def name(self):
         """Return users name and second name."""
-        return '{0} {1}'.format(self.name, self.last_name)
+        return '{0} {1}'.format(self.first_name, self.last_name)

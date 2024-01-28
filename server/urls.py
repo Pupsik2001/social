@@ -24,7 +24,10 @@ admin.autodiscover()
 urlpatterns = [
     # Apps:
     # path('main/', include(main_urls, namespace='main')),
-
+    path(
+        'api/',
+        include(('server.apps.routers', 'apps'), namespace='apps-api'),
+    ),
     # Health checks:
     path('health/', include(health_urls)),
 

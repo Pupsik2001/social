@@ -25,6 +25,7 @@ INSTALLED_APPS: Tuple[str, ...] = (
     # Your apps go here:
     'server.apps.main',
     'server.apps.account',
+    'server.apps.authorization',
 
     # Default django apps:
     'django.contrib.auth',
@@ -36,6 +37,9 @@ INSTALLED_APPS: Tuple[str, ...] = (
     # django-admin:
     'django.contrib.admin',
     'django.contrib.admindocs',
+
+    # django rest framework
+    'rest_framework',
 
     # Security:
     'axes',
@@ -74,6 +78,14 @@ MIDDLEWARE: Tuple[str, ...] = (
     # Django HTTP Referrer Policy:
     'django_http_referrer_policy.middleware.ReferrerPolicyMiddleware',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS':
+        ['django_filters.rest_framework.DjangoFilterBackend'],
+}
 
 ROOT_URLCONF = 'server.urls'
 
@@ -202,7 +214,6 @@ PERMISSIONS_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
 # https://docs.djangoproject.com/en/4.2/ref/settings/#std:setting-EMAIL_TIMEOUT
 
 EMAIL_TIMEOUT = 5
-
 
 AUTH_USER_MODEL = 'account.User'
 

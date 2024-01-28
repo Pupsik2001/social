@@ -13,6 +13,8 @@ classifiers = [
 python = "3.12.1"
 
 django = { version = "^5.0", extras = ["argon2"] }
+djangorestframework = "^3.14.0"
+djangorestframework-simplejwt = "^5.3.1"
 django-split-settings = "^1.2"
 django-axes = "^6.2"
 django-csp = "^3.7"
@@ -26,6 +28,7 @@ gunicorn = "^21.2"
 python-decouple = "^3.8"
 structlog = "^23.2"
 
+django-filter = "^23.5"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.2"
