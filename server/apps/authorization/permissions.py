@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
 class UserPermission(BasePermission):
@@ -9,13 +9,23 @@ class UserPermission(BasePermission):
         if request.user.is_anonymous:
             return request.method in SAFE_METHODS
 
-        if view.basename in ['post']:
+        if view.basename == {'post'}:
             return bool(request.user and request.user.is_authenticated)
+
+        if view.basename == {'post-comment'}:
+            if request.method == {'DELETE'}:
+                return bool(
+                    request.user.is_superuser or
+                    request.user == {obj.author},
+                )
+
+            return bool(request.user and request.user.is_authenticated)
+
         return False
 
     def has_permission(self, request, view):
-        """Hasd permission."""
-        if view.basename is ['post']:
+        """Has permission."""
+        if view.basename in {'post', 'post-comment'}:
             if request.user.is_anonymous:
                 return request.method in SAFE_METHODS
 

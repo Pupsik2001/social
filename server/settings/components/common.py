@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from typing import Dict, List, Tuple, Union
+from datetime import timedelta
 
 from django.utils.translation import gettext_lazy as _
 
@@ -27,6 +28,7 @@ INSTALLED_APPS: Tuple[str, ...] = (
     'server.apps.account',
     'server.apps.authorization',
     'server.apps.post',
+    'server.apps.comment',
 
     # Default django apps:
     'django.contrib.auth',
@@ -90,6 +92,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 15,
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
 ROOT_URLCONF = 'server.urls'

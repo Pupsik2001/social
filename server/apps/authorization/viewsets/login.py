@@ -16,9 +16,7 @@ class LoginViewSet(ViewSet):
 
     def create(self, request, *args, **kwargs):
         """Create login view."""
-        serializer = self.serializer_class(
-            data=request.data,
-        )
+        serializer = self.serializer_class(data=request.data)
 
         try:
             serializer.is_valid(raise_exception=True)
