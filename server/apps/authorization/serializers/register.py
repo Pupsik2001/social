@@ -29,6 +29,6 @@ class RegisterSerializer(UserSerializer):
             'password',
         ]
 
-        def create(self, validated_data):
-            """Use the 'create_user' method."""
-            return User.objects.create_user(**validated_data)
+    def create(self, validated_data):
+        """Use the 'create_user' method."""
+        return User.objects.create_user(**validated_data)
