@@ -14,10 +14,21 @@ class PostSerializer(AbstractSeralizer):
         queryset=User.objects.all(),
         slug_field='public_id',
     )
+    liked = serializers.SerializerMethodField()
+    likes_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'body', 'edited', 'created_at', 'updated_at']
+        fields = [
+            'id',
+            'author',
+            'body',
+            'edited',
+            'liked',
+            'likes_count',
+            'created_at',
+            'updated_at',
+        ]
         read_only_fields = ['edited']
 
     def validate_author(self, value):  # noqa: WPS110
@@ -42,3 +53,15 @@ class PostSerializer(AbstractSeralizer):
             validated_data['edited'] = True
 
         return super().update(instance, validated_data)
+
+    def get_liked(self, instance):  # noqa: WPS615
+        """Get liked post."""
+        request = self.context.get('request', None)
+        if request is None or request.user.is_anonymous:
+            return False
+
+        return request.user.has_liked(instance)
+
+    def get_likes_count(self, instance):  # noqa: WPS615
+        """Find out how many likes."""
+        return instance.liked_by.count()

@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -20,7 +21,7 @@ class PostViewSet(AbstractViewSet):
 
     def get_object(self):
         """Method return a post object using p_id."""
-        obj = Post.objects.get_object_by_public_id(  # noqa
+        obj = Post.objects.get_object_by_public_id(  # noqa: WPS110
             self.kwargs['pk'],
         )
         self.check_object_permissions(self.request, obj)
@@ -35,4 +36,34 @@ class PostViewSet(AbstractViewSet):
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED,
+        )
+
+    @action(methods=['post'], detail=True)
+    def like(self, request, *args, **kwargs):
+        """Like post."""
+        post = self.get_object()
+        user = self.request.user
+
+        user.like(post)
+
+        serializer = self.serializer_class(post)
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+    @action(methods=['post'], detail=True)
+    def remove_like(self, request, *args, **kwargs):
+        """Remove like from post."""
+        post = self.get_object()
+        user = self.request.user
+
+        user.remove_like(post)
+
+        serializer = self.serializer_class(post)
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
         )

@@ -76,6 +76,10 @@ class User(AbstractBaseUser, PermissionsMixin, AbstractIdTimedMixin):
     last_name = models.CharField(max_length=_USER_MAX_LENGTH)
     email = models.EmailField(db_index=True, unique=True)
 
+    posts_liked = models.ManyToManyField(
+        'post.Post',
+        related_name='liked_by',
+    )
     bio = models.TextField(default='')
     # add 'avatar imagefield'
 
@@ -99,3 +103,15 @@ class User(AbstractBaseUser, PermissionsMixin, AbstractIdTimedMixin):
     def name(self):
         """Return users name and second name."""
         return '{0} {1}'.format(self.first_name, self.last_name)
+
+    def like(self, post):
+        """Like post if it hasn't been done yet."""
+        return self.posts_liked.add(post)
+
+    def remove_like(self, post):
+        """Remove a like from a post."""
+        return self.posts_liked.remove(post)
+
+    def has_liked(self, post):
+        """Return True if the user has liked a post else False."""
+        return self.posts_liked.filter(pk=post.pk).exists()
