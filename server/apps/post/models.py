@@ -9,8 +9,6 @@ from server.common.djangoabs.models import (
 class PostManager(AbstractManager):
     """Post manager."""
 
-    pass  # noqa
-
 
 # TODO: add in later description
 class Post(AbstractIdTimedMixin):
@@ -23,11 +21,12 @@ class Post(AbstractIdTimedMixin):
     body = models.TextField(default='')
     edited = models.BooleanField(default=False)
 
-    objects = PostManager()  # noqa: WPS110
+    objects = PostManager()
 
     class Meta:
         ordering = ['-created_at']
-        
+
     def __str__(self):
         """Method str."""
         return '{0}'.format(self.author.name)
+
