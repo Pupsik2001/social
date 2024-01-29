@@ -24,7 +24,9 @@ class CommentViewSet(AbstractViewSet):
         if post_pk is None:
             return Http404
 
-        return Comment.objects.filter(post__public_id=post_pk).select_related('post', 'author')
+        return Comment.objects.filter(
+            post__public_id=post_pk,
+        ).select_related('post', 'author')
 
     def get_object(self):
         """Get object comment."""

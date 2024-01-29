@@ -25,6 +25,6 @@ posts_router.register(r'comment', CommentViewSet, basename='post-comment')
 router.register(r'user', UserViewSet, basename='user')
 
 urlpatterns = [
-    *router.urls,  # noqa
-    *posts_router.urls,  # noqa
+    *router.urls,
+    *posts_router.urls,
 ]

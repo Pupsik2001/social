@@ -1,12 +1,13 @@
 from django.db import models
 
-from server.common.djangoabs.models import AbstractIdTimedMixin, AbstractManager
+from server.common.djangoabs.models import (
+    AbstractIdTimedMixin,
+    AbstractManager,
+)
 
 
 class CommentManager(AbstractManager):
     """Comment manager."""
-
-    pass
 
 
 class Comment(AbstractIdTimedMixin):
@@ -23,7 +24,7 @@ class Comment(AbstractIdTimedMixin):
     body = models.TextField(default='')
     edited = models.BooleanField(default=False)
 
-    objects = CommentManager()  # noqa: WPS
+    objects = CommentManager()
 
     def __str__(self):
         """Method return self name."""

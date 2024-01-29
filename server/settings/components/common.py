@@ -8,8 +8,8 @@ For the full list of settings and their config, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from typing import Dict, List, Tuple, Union
 from datetime import timedelta
+from typing import Dict, List, Tuple, Union
 
 from django.utils.translation import gettext_lazy as _
 
