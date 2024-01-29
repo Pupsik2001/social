@@ -3,12 +3,12 @@ from typing import Final
 from rest_framework import serializers
 
 from server.apps.account.models import User
-from server.apps.account.serializers import UserSelializer
+from server.apps.account.serializers import UserSerializer
 
 _MAX_LENGTH_PASSWORD: Final = 128
 
 
-class RegisterSerializer(UserSelializer):
+class RegisterSerializer(UserSerializer):
     """Registration serializer for requests and uesr creation."""
 
     # Making sure the password is at least 8 characters long,

@@ -1,18 +1,9 @@
-from rest_framework import serializers
-
 from server.apps.account.models import User
+from server.common.djangoabs.serializers import AbstractSeralizer
 
 
-class UserSelializer(serializers.ModelSerializer):
+class UserSerializer(AbstractSeralizer):
     """User serializers."""
-
-    id = serializers.UUIDField(
-        source='public_id',
-        read_only=True,
-        format='hex',
-    )
-    created_at = serializers.DateTimeField(read_only=True)
-    updated_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = User
@@ -21,4 +12,4 @@ class UserSelializer(serializers.ModelSerializer):
             'last_name', 'bio', 'email',  # add avatar
             'is_active', 'created_at', 'updated_at',
         ]
-        read_only_field = ['is_active']
+        read_only_fields = ['is_active']

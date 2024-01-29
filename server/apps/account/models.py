@@ -1,31 +1,30 @@
-import textwrap
-from typing import Final
-from uuid import uuid4
+from typing import Any, Final
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.http import Http404
+
+from server.common.djangoabs.models import (
+    AbstractIdTimedMixin,
+    AbstractManager,
+)
 
 _USER_MAX_LENGTH: Final = 255
 
 
-class UserManager(BaseUserManager):
+class UserManager(BaseUserManager['User'], AbstractManager):
     """User manager."""
 
-    def get_object_by_public_id(self, public_id):
-        """Get users by public id."""
-        try:  # noqa: WPS229
-            instance = self.get(public_id=public_id)
-            return instance
-        except (ObjectDoesNotExist, ValueError, TypeError):
-            return Http404
-
-    def create_user(self, username, email, password=None, **kwargs):
+    def create_user(
+        self,
+        username: str,
+        email: str,
+        password=None,
+        **extra_fields: Any,
+    ) -> 'User':
         """Create and return with an email number, username and password."""
         if username is None:
             raise TypeError('Users must have a username.')
@@ -34,17 +33,22 @@ class UserManager(BaseUserManager):
         if password is None:
             raise TypeError('User must have an password.')
 
-        user = self.model(
+        user = User(
             username=username,
             email=self.normalize_email(email),
-            **kwargs,
+            **extra_fields,
         )
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
-    def create_superuser(self, username, email, password, **kwargs):
+    def create_superuser(
+        self,
+        username: str,
+        email: str,
+        password: str,
+        **extra_fields: Any,
+    ) -> 'User':
         """Create and return a `User` with superuser (admin) permissions."""
         if username is None:
             raise TypeError('Superusers must have an username.')
@@ -53,23 +57,15 @@ class UserManager(BaseUserManager):
         if password is None:
             raise TypeError('Superusers must have a password.')
 
-        user = self.create_user(username, email, password, **kwargs)
+        user = self.create_user(username, email, password, **extra_fields)
         user.is_superuser = True
         user.is_staff = True
-        user.save(using=self._db)
-
+        user.save(using=self._db, update_fields=['is_superuser', 'is_staff'])
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, AbstractIdTimedMixin):
     """User model, use AbstractBaseUser abstact model."""
-
-    public_id = models.UUIDField(
-        db_index=True,
-        unique=True,
-        default=uuid4,
-        editable=False,
-    )
 
     username = models.CharField(
         db_index=True,
@@ -81,18 +77,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(db_index=True, unique=True)
 
     bio = models.TextField(default='')
-    # avatar = models.ImageField(null=True)
+    # add 'avatar imagefield'
 
     is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    objects = UserManager()  # noqa: WPS110
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
-    objects = UserManager()
+    USERNAME_FIELD = 'email'  # noqa: WPS115
+    REQUIRED_FIELDS = ['username']  # noqa: WPS115
 
     class Meta:
         verbose_name = 'User'
@@ -100,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         """Return email users."""
-        return textwrap.wrap(self.email)
+        return '{0}'.format(self.email)
 
     @property
     def name(self):

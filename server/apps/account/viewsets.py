@@ -1,16 +1,16 @@
-from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from server.apps.account.models import User
-from server.apps.account.serializers import UserSelializer
+from server.apps.account.serializers import UserSerializer
+from server.common.djangoabs.viewsets import AbstractViewSet
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(AbstractViewSet):
     """Here description user view set."""
 
     http_method_names = ('patch', 'get')
     permission_classes = (IsAuthenticated,)
-    serializer_class = UserSelializer
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         """Get a list of all the users."""
@@ -20,6 +20,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         """Method is used by the viewset to get one user."""
-        object_user = User.objects.get_object_by_public_id(self.kwargs['pk'])
-        self.check_object_permissions(self.request, object_user)
-        return object_user
+        obj = User.objects.get_object_by_public_id(self.kwargs['pk'])  # noqa
+        self.check_object_permissions(self.request, obj)
+        return obj

@@ -26,6 +26,7 @@ INSTALLED_APPS: Tuple[str, ...] = (
     'server.apps.main',
     'server.apps.account',
     'server.apps.authorization',
+    'server.apps.post',
 
     # Default django apps:
     'django.contrib.auth',
@@ -40,9 +41,10 @@ INSTALLED_APPS: Tuple[str, ...] = (
 
     # django rest framework
     'rest_framework',
+    'rest_framework_simplejwt',
 
     # Security:
-    'axes',
+    # 'axes',
 
     # Health checks:
     # You may want to enable other checks as well,
@@ -73,7 +75,7 @@ MIDDLEWARE: Tuple[str, ...] = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # Axes:
-    'axes.middleware.AxesMiddleware',
+    # 'axes.middleware.AxesMiddleware',
 
     # Django HTTP Referrer Policy:
     'django_http_referrer_policy.middleware.ReferrerPolicyMiddleware',
@@ -85,6 +87,9 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS':
         ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 15,
 }
 
 ROOT_URLCONF = 'server.urls'
@@ -180,7 +185,7 @@ MEDIA_ROOT = BASE_DIR.joinpath('media')
 # https://docs.djangoproject.com/en/4.2/topics/auth/
 
 AUTHENTICATION_BACKENDS = (
-    'axes.backends.AxesBackend',
+    # 'axes.backends.AxesBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
